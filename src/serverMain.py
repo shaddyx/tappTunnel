@@ -5,6 +5,8 @@ from tools import server_events
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger("engineio").setLevel(logging.WARNING)
+logging.getLogger("socketio").setLevel(logging.WARNING)
+
 import eventlet
 import socketio
 

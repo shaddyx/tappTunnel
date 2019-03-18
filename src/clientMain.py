@@ -9,6 +9,7 @@ from client.interface import Interface
 
 logging.basicConfig(level=logging.INFO)
 logging.getLogger("engineio").setLevel(logging.WARNING)
+logging.getLogger("socketio").setLevel(logging.WARNING)
 
 
 parser = argparse.ArgumentParser(description='Virtual interface')
