@@ -41,3 +41,6 @@ class WSClient:
         self.sio.connect(self.server)
         self.sio.wait()
 
+    def request_ip(self):
+        self.sio.emit(server_events.REQUEST_IP)
+

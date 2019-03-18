@@ -27,8 +27,11 @@ class Client:
         logging.info("Initizlizing client")
         @self.bus.on(events.IP_RECEIVED)
         def ip(ip):
-            self.interface = Interface(ip, self.bus)
-            self.interface.run()
+            if not self.interface:
+                self.interface = Interface(ip, self.bus)
+                self.interface.run()
+            else:
+                logging.error("Just reconnect...")
 
         @self.bus.on(events.SERVER_DATA)
         def data_drom_server(data):
@@ -61,6 +64,7 @@ with Client(ws_client_instance, bus) as client:
     client.init()
     ws_client_instance.init()
     ws_client_instance.connect()
+    ws_client_instance.request_ip()
 
 
 

@@ -29,7 +29,10 @@ logging.info("adding listeners")
 def connect(sid, environ):
     logging.info("Client connected: {}".format(sid))
     clients.append(sid)
-    sio.emit(server_events.IP, data = ipResolver.resolve(), room=sid)
+
+@sio.on(server_events.REQUEST_IP)
+def ip_request(sid):
+    sio.emit(server_events.IP, data=ipResolver.resolve(), room=sid)
 
 @sio.on('data')
 def message(sid, data):
