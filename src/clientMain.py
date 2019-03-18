@@ -17,10 +17,11 @@ args = parser.parse_args()
 bus = EventBus()
 
 class Client:
-    def __init__(self, bus: EventBus):
+    def __init__(self, ws_client: ws_client.WSClient, bus: EventBus):
         logging.info("Instantiating client")
         self.bus = bus
         self.interface = None
+        self.ws_client = ws_client
 
     def init(self):
         logging.info("Initizlizing client")
@@ -34,19 +35,36 @@ class Client:
             if self.interface:
                 self.interface.sendPacket(data)
 
-        @self.bus.on(events.DISCONNET)
+        @bus.on(events.INTERFACE_DATA)
+        def packetFromTapReceived(data):
+            self.ws_client.send_data(data)
+
+        #@self.bus.on(events.DISCONNET)
         def disconnected():
             if self.interface:
                 self.interface.close()
 
+    def close(self):
+        if self.interface:
+            self.interface.close()
+        self.interface = None
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
 
 ws_client_instance = ws_client.WSClient(args.server, bus)
-client = Client(bus)
+with Client(ws_client_instance, bus) as client:
 
-client.init()
-ws_client_instance.init()
-ws_client_instance.connect()
+    client.init()
+    ws_client_instance.init()
+    ws_client_instance.connect()
 
-logging.info("Starting main loop")
-while True:
-    time.sleep(1)
+
+
+    logging.info("Starting main loop")
+    while True:
+        time.sleep(1)
+

@@ -20,10 +20,6 @@ class WSClient:
         def on_connect():
             logging.info("Connection established")
 
-        # @self.bus.on(events.INTERFACE_DATA)
-        # def packetFromTapReceived(data):
-        #     self.sio.emit(server_events.DATA, data)
-
         @self.sio.on(server_events.IP)
         def on_message(ip):
             logging.info("Received ip: {}".format(ip))
@@ -36,6 +32,9 @@ class WSClient:
         @self.sio.on(server_events.DISCONNECT)
         def on_disconnect():
             self.bus.emit(events.DISCONNET)
+
+    def send_data(self, data):
+        self.sio.emit(server_events.DATA, data)
 
     def connect(self):
         logging.info("Connecting to: {}".format(self.server))
