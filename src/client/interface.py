@@ -9,7 +9,7 @@ from tools import thread
 class Interface:
 
     def __init__(self, ip, event_bus):
-        sekf.tap = None
+        self.tap = None
         self.ip = ip
         self.event_bus = event_bus  # type: EventBus
 

@@ -8,19 +8,21 @@ from tools import server_events
 
 
 class WSClient:
-    def __init__(self, port, bus: EventBus):
+    def __init__(self, server, bus: EventBus):
+        logging.info("Instantiating websocket client")
         self.sio = socketio.Client()
-        self.port = port
+        self.server = server
         self.bus = bus
 
     def init(self):
+        logging.info("Initializing websocket client")
         @self.sio.on('connect')
         def on_connect():
             logging.info("Connection established")
 
-        @events.bus.on(events.INTERFACE_DATA)
-        def packetFromTapReceived(data):
-            self.sio.emit(server_events.DATA, data)
+        # @self.bus.on(events.INTERFACE_DATA)
+        # def packetFromTapReceived(data):
+        #     self.sio.emit(server_events.DATA, data)
 
         @self.sio.on(server_events.IP)
         def on_message(ip):
@@ -31,11 +33,12 @@ class WSClient:
         def on_message(data):
             self.bus.emit(events.SERVER_DATA, data)
 
-        @self.sio.on('disconnect')
+        @self.sio.on(server_events.DISCONNECT)
         def on_disconnect():
             self.bus.emit(events.DISCONNET)
 
     def connect(self):
-        self.sio.connect(self, self.port)
+        logging.info("Connecting to: {}".format(self.server))
+        self.sio.connect(self.server)
         self.sio.wait()
 
