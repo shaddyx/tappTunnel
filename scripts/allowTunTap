@@ -1,0 +1,2 @@
+#echo 'KERNEL=="tun", GROUP="netdev", MODE="0660", OPTIONS+="static_node=net/tun"' > /etc/udev/rules.d/zzz_net_tun.rules
+chgrp netdev /dev/net/tun; chmod 777 /dev/net/tun

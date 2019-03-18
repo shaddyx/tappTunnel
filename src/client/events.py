@@ -1,0 +1,5 @@
+INTERFACE_DATA = "interface_data"
+SERVER_DATA = "interface_data"
+WS_DATA = "ws_data"
+IP_RECEIVED = "ip"
+DISCONNET = "disconnect"
