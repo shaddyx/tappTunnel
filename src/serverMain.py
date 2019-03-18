@@ -32,6 +32,7 @@ def connect(sid, environ):
 
 @sio.on(server_events.REQUEST_IP)
 def ip_request(sid):
+    logging.info("Client requested ip")
     sio.emit(server_events.IP, data=ipResolver.resolve(), room=sid)
 
 @sio.on('data')

@@ -25,6 +25,11 @@ class Client:
 
     def init(self):
         logging.info("Initizlizing client")
+
+        @self.bus.on(events.CONNECT)
+        def connect():
+            ws_client_instance.request_ip()
+
         @self.bus.on(events.IP_RECEIVED)
         def ip(ip):
             if not self.interface:
@@ -64,9 +69,6 @@ with Client(ws_client_instance, bus) as client:
     client.init()
     ws_client_instance.init()
     ws_client_instance.connect()
-    ws_client_instance.request_ip()
-
-
 
     logging.info("Starting main loop")
     while True:

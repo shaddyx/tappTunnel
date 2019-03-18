@@ -5,6 +5,7 @@ from event_bus import EventBus
 
 from client import events
 from tools import server_events
+from tools.thread import run_in_thread
 
 
 class WSClient:
@@ -16,9 +17,11 @@ class WSClient:
 
     def init(self):
         logging.info("Initializing websocket client")
-        @self.sio.on('connect')
+
+        @self.sio.on(server_events.CONNECT)
         def on_connect():
             logging.info("Connection established")
+            self.bus.emit(events.CONNECT)
 
         @self.sio.on(server_events.IP)
         def on_message(ip):
@@ -36,6 +39,7 @@ class WSClient:
     def send_data(self, data):
         self.sio.emit(server_events.DATA, data)
 
+    @run_in_thread
     def connect(self):
         logging.info("Connecting to: {}".format(self.server))
         self.sio.connect(self.server)
