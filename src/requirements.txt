@@ -5,7 +5,7 @@ eventlet==0.24.1
 greenlet==0.4.15
 idna==2.8
 monotonic==1.5
-python-engineio==3.4.4
+python-engineio==3.8.2.post1
 python-pytuntap==1.0.5
 python-socketio==4.0.0
 requests==2.21.0
